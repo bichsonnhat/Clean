@@ -1,11 +1,12 @@
-import React from 'react'
+import DetailServiceTable from "@/components/service/detail/DetailServiceTable";
+import React from "react";
 
-const DetailPage = () => {
+const ServiceDetailPage = () => {
   return (
     <div>
-      DetailPage
+      <DetailServiceTable />
     </div>
-  )
-}
+  );
+};
 
-export default DetailPage
+export default ServiceDetailPage;
