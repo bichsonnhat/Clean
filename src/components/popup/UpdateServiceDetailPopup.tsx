@@ -14,25 +14,33 @@ import CustomSelect from "../select/CustomSelect";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  createServiceDetailData,
   serviceDetailSchema,
   updateServiceDetailData,
 } from "@/schema/serviceDetailSchema";
 import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
-export function CreateServiceDetailPopup({ id }: { id: string }) {
+export function UpdateServiceDetailPopup({
+  id,
+  open,
+  onClose,
+}: {
+  id: string | null;
+  open: boolean;
+  onClose: () => void;
+}) {
   const queryClient = useQueryClient();
 
   const fetchServiceTypesUrl = "http://localhost:3000/api/service-types";
-  const fetchServiceDetailUrl = `http://localhost:3000/api/service-detail/${id}`;
+  const fetchServiceDetailUrl = id
+    ? `http://localhost:3000/api/service-detail/${id}`
+    : null;
   const createServiceDetailUrl = "http://localhost:3000/api/service-detail";
 
   const [serviceTypes, setServiceTypes] = useState<ServiceType[]>([]);
   const [serviceDetail, setServiceDetail] = useState<ServiceDetail | null>(
     null
   );
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const form = useForm<updateServiceDetailData>({
     mode: "onSubmit",
@@ -41,6 +49,7 @@ export function CreateServiceDetailPopup({ id }: { id: string }) {
 
   const fetchServiceDetail = async () => {
     try {
+      if (!fetchServiceDetailUrl) return;
       const response = await fetch(fetchServiceDetailUrl);
       if (!response.ok) {
         throw new Error("Error fetching service detail");
@@ -63,6 +72,7 @@ export function CreateServiceDetailPopup({ id }: { id: string }) {
       console.error("Error fetching service types:", error);
     }
   };
+
   const updateServiceDetail = async (data: updateServiceDetailData) => {
     try {
       const response = await fetch(createServiceDetailUrl, {
@@ -73,16 +83,17 @@ export function CreateServiceDetailPopup({ id }: { id: string }) {
         body: JSON.stringify(data),
       });
       if (!response.ok) {
-        throw new Error("Error creating service detail");
+        throw new Error("Error updating service detail");
       }
       const result = await response.json();
       console.log(result);
     } catch (error) {
-      console.error("Error creating service detail:", error);
+      console.error("Error updating service detail:", error);
     }
   };
 
   useEffect(() => {
+    if (!id) return;
     fetchServiceTypes();
     fetchServiceDetail();
     if (serviceDetail) {
@@ -91,7 +102,7 @@ export function CreateServiceDetailPopup({ id }: { id: string }) {
         title: serviceDetail.title.toString(),
       });
     }
-  }, []);
+  }, [id]);
 
   const options = serviceTypes.map((serviceType) => ({
     id: serviceType.id,
@@ -111,7 +122,7 @@ export function CreateServiceDetailPopup({ id }: { id: string }) {
       await updateServiceDetail(data);
       console.log("Service detail update successfully.");
       queryClient.invalidateQueries({ queryKey: ["serviceDetails"] });
-      setIsDialogOpen(false);
+      onClose();
     } catch (error) {
       console.error("Error while updating service detail:", error);
       alert("Failed to update service detail. Please try again.");
@@ -119,16 +130,7 @@ export function CreateServiceDetailPopup({ id }: { id: string }) {
   };
 
   return (
-    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <DialogTrigger asChild>
-        <Button
-          className="px-7 h-[38px] bg-[#1b78f2] hover:bg-opacity-90 rounded-[8px] text-xs font-Averta-Bold tracking-normal leading-loose text-center text-white"
-          variant="default"
-          onClick={() => setIsDialogOpen(true)}
-        >
-          Create Detail
-        </Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Create Service Detail</DialogTitle>

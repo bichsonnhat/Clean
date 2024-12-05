@@ -30,6 +30,7 @@ type DetailServiceRowProps = {
   serviceType?: {
     name: string;
   };
+  onRowClick: (id: string) => void;
 };
 
 type ServiceDetail = {

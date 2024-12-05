@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import CustomInput from "../input/CustomInput";
+import CustomInput from "@/components/input/CustomInput";
 import CustomSelect from "../select/CustomSelect";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -51,10 +51,10 @@ export function CreateLeaveRequestPopup() {
                   label="Availability Type"
                   id="availability_type"
                   options={[
-                    "Vacation",
-                    "Sick Leave",
-                    "Personal Leave",
-                    "Unavailable",
+                    { id: "vacation", name: "Vacation" },
+                    { id: "sick_leave", name: "Sick Leave" },
+                    { id: "personal_leave", name: "Personal Leave" },
+                    { id: "unavailable", name: "Unavailable" },
                   ]}
                   placeholder="Select Service Category"
                   value={field.value ?? ""}
