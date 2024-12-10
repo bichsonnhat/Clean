@@ -1,10 +1,12 @@
 "use client";
 import { addServiceCategory } from "@/actions/actions";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 const HomeCleaning = () => {
   const numberOfBed: string[] = ["Studio", "1", "2", "3", "4", "5"];
   const numberOfBathroom: string[] = ["1", "2", "3", "4", "5"];
+  const router = useRouter();
   const cleanTypes = [
     {
       name: "Standard",
@@ -43,6 +45,7 @@ const HomeCleaning = () => {
   };
 
   const handleNext = () => {
+    router.push("/booking/step-2");
     // addBookingDetail(selectedNumberOfBed, selectedNumberOfBathroom);
     // addServiceCategory();
   };
@@ -56,6 +59,7 @@ const HomeCleaning = () => {
       {items.map((item, index) => (
         <div
           key={index}
+          data-testid={`${type}-option-${item}`} 
           onClick={() => handleSelect(index, type)}
           className={`cursor-pointer flex px-[38px] py-[15px] rounded-[10px] bg-white justify-center items-center border-[2px] transition ${
             selectedItem === index

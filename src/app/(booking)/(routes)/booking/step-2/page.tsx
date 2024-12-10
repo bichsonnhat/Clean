@@ -2,6 +2,7 @@
 import Calendar from "@/components/calendar/Calendar";
 import Header from "@/components/header/Header";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { useState, useEffect } from "react";
 const Step_2 = () => {
@@ -44,12 +45,17 @@ const Step_2 = () => {
         );
     };
 
+    const router = useRouter();
+    const handleClick= () => {
+        router.push("/booking/step-3");
+    }
+
     const getMonth = (index: any) => {
         return months[(index + months.length - 1) % months.length];
     };
 
     return (
-        <section className="flex flex-col items-center justify-center">
+        <section data-testid="mock-calendar" className="flex flex-col items-center justify-center">
             <div className="font-Averta-Bold text-center mt-[50px] text-4xl font-bold text-[#151634]">
                 Book Date
             </div>
@@ -118,7 +124,7 @@ const Step_2 = () => {
                 </div>
                 <Calendar month={currentIndex} />
             </div>
-            <button className="mt-[50px] py-[20px] px-[70px] bg-blue-600 rounded-[10px] text-white w-[180px] h-[60px] text-center font-Averta-Semibold">
+            <button onClick={handleClick} className="mt-[50px] py-[20px] px-[70px] bg-blue-600 rounded-[10px] text-white w-[180px] h-[60px] text-center font-Averta-Semibold">
                 Next
             </button>
         </section>

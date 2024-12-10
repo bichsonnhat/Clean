@@ -11,8 +11,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel"
-import { useRouter } from 'next/navigation';
-import { bookingStore } from '@/utils/store/booking.store';
+// import { useRouter } from 'next/navigation';
+// import { bookingStore } from '@/utils/store/booking.store';
 
 const timeSlots = [
   {
@@ -48,22 +48,22 @@ const timeSlots = [
 ];
 
 const Step_3 = () => {
-  const bookingData = bookingStore((state: any) => state.bookingData)
+  // const bookingData = bookingStore((state: any) => state.bookingData)
 
   const [timeSelected, setTimeSelected] = useState<number>(0);
-  const bookingUpdate = bookingStore((state: any) => state.updateBookingData)
+  // const bookingUpdate = bookingStore((state: any) => state.updateBookingData)
+  // const router = useRouter();
 
-  const router = useRouter();
   const handleRouteExit = () => {
-    router.push('/');
+    // router.push('/');
   }
   const handleRoute = () => {
-    router.push('/booking/step-4')
+    // router.push('/booking/step-4')
   }
   
   const handleClick = (time: number) => {
     setTimeSelected(time);
-    bookingUpdate({ bookingTiming: timeSelected });
+    // bookingUpdate({ bookingTiming: timeSelected });
   }
 
   // const day = new Date(bookingData.bookingDate).getDate();
