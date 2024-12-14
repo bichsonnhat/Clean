@@ -20,7 +20,7 @@ export interface BookingData {
     bookingAddress?: string;
     APT?: string;
     howToGetIn?: string;
-    anySpecificSpot?: string;
+    anySpecificSpot?: string[];
     anyPet?: boolean;
     petNote?: string;
     additionalNote?: string;
@@ -30,4 +30,8 @@ export interface BookingData {
     emailAddress?: string;
     phoneNumber?: string;
     contactNote?: string;
+    checked?: boolean;
+
+    bookingNote?: string;
+    totalPrice?: number;
   }

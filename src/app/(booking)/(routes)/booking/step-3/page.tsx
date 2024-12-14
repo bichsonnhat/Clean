@@ -10,7 +10,7 @@ const timeSlots = [
   {
     type: "specific",
     time: "Flexible",
-    value: 0,
+    value: 1,
   },
   {
     type: "standard",
@@ -52,8 +52,8 @@ const Step_3 = () => {
   }
   
   const handleClick = (time: number) => {
+    bookingUpdate({ bookingTiming: time });
     setTimeSelected(time);
-    bookingUpdate({ bookingTiming: timeSelected });
   }
 
   return (

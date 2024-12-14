@@ -12,6 +12,7 @@ interface InputWithLabelProps {
     inputWidth?: string;
     plusPX?: string,
     className?: string;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => any;
 }
 
 export function InputWithLabel({
@@ -22,6 +23,7 @@ export function InputWithLabel({
     inputWidth = "w-full",
     plusPX,
     className,
+    onChange,
 }: InputWithLabelProps) {
 
     return (
@@ -36,6 +38,7 @@ export function InputWithLabel({
                 id={inputId}
                 placeholder={inputPlaceholder}
                 style={plusPX ? { width: `calc(${inputWidth} + ${plusPX})` } : { width: `${inputWidth}` }}
+                onChange={onChange}
             />
         </div>
     );

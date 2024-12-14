@@ -1,5 +1,6 @@
 "use client";
 
+import { bookingStore } from "@/utils/store/booking.store";
 import { Button } from "../ui/button";
 import { useState } from "react";
 
@@ -18,10 +19,31 @@ export function ToggleButton({
     isToggled,
     onToggle,
 }: ToggleButtonProps) {
+    const bookingUpdate = bookingStore((state: any) => state.updateBookingData)
     return (
         <Button
             className={`${className} ${isToggled ? 'border-[#1A78F2] text-[#1A78F2]' : 'border-[#d3d8dd] text-[#4f6071]'}`}
-            onClick={() => onToggle(id)}
+            onClick={() => {
+                if(contentText === "Yes") {
+                    bookingUpdate({ anyPet: true })
+                }
+                if(contentText === "No") {
+                    bookingUpdate({ anyPet: false })
+                }
+                if(contentText === "Someone in Home") {
+                    bookingUpdate({ howToGetIn: "Someone in Home" })
+                }
+                if(contentText === "Doorman") {
+                    bookingUpdate({ howToGetIn: "Doorman" })
+                }
+                if(contentText === "Hidden Key") {
+                    bookingUpdate({ howToGetIn: "Hidden Key" })
+                }
+                if(contentText === "Others") {
+                    bookingUpdate({ howToGetIn: "Others" })
+                }
+                onToggle(id)
+            }}
         >
             {contentText}
         </Button>
