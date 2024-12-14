@@ -91,7 +91,7 @@ const HomePage = () => {
             <p className="text-2xl md:text-5xl lg:text-6xl leading-tight">
               Centre For All Needs
             </p>
-            <button className="px-5 md:px-7 md:py-3 py-2 mt-4 md:mt-12 bg-[#1b78f2] rounded-xl text-base md:text-lg font-Averta-Semibold text-white hover:bg-blue-700 transition-colors"
+            <button id="1stButton" className="px-5 md:px-7 md:py-3 py-2 mt-4 md:mt-12 bg-[#1b78f2] rounded-xl text-base md:text-lg font-Averta-Semibold text-white hover:bg-blue-700 transition-colors"
               onClick={handleBooking}
             >
               Booking from 80$
@@ -314,7 +314,7 @@ const HomePage = () => {
           className="absolute inset-0 object-cover"
         />
         <div className="flex flex-col absolute inset-0 items-center justify-center">
-          <button className="px-5 md:px-7 py-2 bg-[#1b78f2] rounded-xl text-base md:text-lg font-Averta-Semibold text-white hover:bg-blue-700 transition-colors"
+          <button id="2ndButton" className="px-5 md:px-7 py-2 bg-[#1b78f2] rounded-xl text-base md:text-lg font-Averta-Semibold text-white hover:bg-blue-700 transition-colors"
             onClick={handleBooking}
           >
             Booking from 80$
