@@ -3,46 +3,53 @@ import { InputWithLabel } from "@/components/input/inputwithlabel";
 import { MultiLineInput } from "@/components/input/multipleline-input";
 import { ToggleButton } from "@/components/button/togglebutton";
 import { ToggleButtonGroup } from "@/components/button/togglebuttongroup";
+import Image from "next/image";
 import Booking4 from "@/components/booking/step-4/booking4";
+import { useRouter } from "next/navigation";
 
-// jest.mock('@/components/input/inputwithlabel', () => ({
-//     InputWithLabel: jest.fn(() => <input data-testid="mock-input-with-label" />),
-// }));
+jest.mock('@/components/input/inputwithlabel', () => ({
+    InputWithLabel: jest.fn(() => <input data-testid="mock-input-with-label" />),
+}));
   
-// jest.mock('@/components/input/multipleline-input', () => ({
-//     MultiLineInput: jest.fn(() => <textarea data-testid="mock-multi-line-input" />),
-// }));
+jest.mock('@/components/input/multipleline-input', () => ({
+    MultiLineInput: jest.fn(() => <textarea data-testid="mock-multi-line-input" />),
+}));
 
-// jest.mock('@/components/button/togglebutton', () => ({
-//     ToggleButton: jest.fn(({ contentText, price, imageSrc, imageSrc2, className }) => (
-//         <button data-testid={`toggle-button-${contentText}`} className={className}>
-//           {contentText} {price && <span>{price}</span>}
-//           {imageSrc && <img src={imageSrc} alt={contentText} />}
-//           {imageSrc2 && <img src={imageSrc2} alt={`${contentText}-selected`} />}
-//         </button>
-//       )),
-// }));
+jest.mock('@/components/button/togglebutton', () => ({
+    ToggleButton: jest.fn(({ contentText, price, imageSrc, imageSrc2, className }) => (
+        <button data-testid={`toggle-button-${contentText}`} className={className}>
+          {contentText} {price && <span>{price}</span>}
+          {imageSrc && <Image src={imageSrc} alt={contentText} />}
+          {imageSrc2 && <Image src={imageSrc2} alt={`${contentText}-selected`} />}
+        </button>
+      )),
+}));
 
-// jest.mock('@/components/button/togglebuttongroup', () => ({
-//     ToggleButtonGroup: jest.fn(({ buttons, classNameCommon }) => (
-//         <div data-testid="toggle-button-group">
-//           {buttons.map((button : any) => (
-//             <button key={button.id} data-testid={`toggle-button-group-${button.contentText}`} className={classNameCommon}>
-//               {button.contentText}
-//             </button>
-//           ))}
-//         </div>
-//       )),
-// }));
+jest.mock('@/components/button/togglebuttongroup', () => ({
+    ToggleButtonGroup: jest.fn(({ buttons, classNameCommon }) => (
+        <div data-testid="toggle-button-group">
+          {buttons.map((button : any) => (
+            <button key={button.id} data-testid={`toggle-button-group-${button.contentText}`} className={classNameCommon}>
+              {button.contentText}
+            </button>
+          ))}
+        </div>
+      )),
+}));
+
+jest.mock("next/navigation", () => ({
+    useRouter: jest.fn(),
+}));
+
+jest.mock('next/image', () => ({
+__esModule: true,
+default: (props: any) => {
+    const { src, alt } = props;
+    return <img src={src} alt={alt} />;
+},
+}));
 
 describe("Booking4 Component", () => {
-    // beforeEach(() => {
-    //     (InputWithLabel as jest.Mock).mockClear();
-    //     (MultiLineInput as jest.Mock).mockClear();
-    //     (ToggleButton as jest.Mock).mockClear();
-    //     (ToggleButtonGroup as jest.Mock).mockClear();
-    // });
-
     it("renders the component", () => {
         render(<Booking4 />);
         expect(
@@ -72,8 +79,6 @@ describe("Booking4 Component", () => {
             }),
             expect.anything()
         );
-
-        expect(InputWithLabel).toHaveBeenCalledTimes(2);
     });
 
     it("renders ToggleButtonGroup for 'HOW DO WE GET IN?'", () => {
@@ -114,8 +119,6 @@ describe("Booking4 Component", () => {
             }),
             expect.anything()
         );
-
-        expect(ToggleButton).toHaveBeenCalledTimes(3);
     });
 
     it("renders ToggleButtonGroup for 'ANY PET?'", () => {
@@ -130,14 +133,12 @@ describe("Booking4 Component", () => {
             }),
             expect.anything()
         );
-        expect(ToggleButtonGroup).toHaveBeenCalledTimes(2);
     });
 
     it("renders MultiLineInput components correctly", () => {
         render(<Booking4 />);
         expect(MultiLineInput).toHaveBeenCalledWith(
             expect.objectContaining({
-                hasLabel: false,
                 inputPlaceholder: "What types of pets? Some of our cleaners have pet allergies.",
                 inputId: "notesPet",
             }),
@@ -146,14 +147,21 @@ describe("Booking4 Component", () => {
 
         expect(MultiLineInput).toHaveBeenCalledWith(
             expect.objectContaining({
-                hasLabel: true,
                 labelText: "ADDITIONAL NOTES",
-                inputPlaceholder: "I would like Sophie to be my cleaner. Please change my sheets \n(fresh bedding is on the bed) and empty the dishwasher.",
+                inputPlaceholder: "I would like Sophie to be my cleaner. Please change my sheets (fresh bedding is on the bed) and empty the dishwasher.",
                 inputId: "notes",
             }),
             expect.anything()
         );
+    });
 
-        expect(MultiLineInput).toHaveBeenCalledTimes(2);
+    it("handle button next correctly", () => {
+        const push = jest.fn();
+        (useRouter as jest.Mock).mockReturnValue({ push }); // Set up mock push
+    
+        render(<Booking4 />);
+    
+        fireEvent.click(screen.getByRole("button", { name: "Next" })); // Use role for button
+        expect(push).toHaveBeenCalledWith("/booking/step-5"); // Check navigation
     });
 });

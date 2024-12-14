@@ -9,7 +9,6 @@ interface MultiLineInputProps {
     inputId: string;
     inputWidth?: string;
     inputHeight?: string;
-    hasLabel: boolean;
     disabled?: boolean;
     onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
@@ -20,7 +19,6 @@ export function MultiLineInput({
     inputId,
     inputWidth = "w-full",
     inputHeight = "h-full",
-    hasLabel,
     disabled,
     onChange,
 }: MultiLineInputProps) {

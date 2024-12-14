@@ -145,7 +145,6 @@ const Booking4 = () => {
           <div className="grid justify-center items-center mt-[45px]">
             <MultiLineInput
               disabled={!bookingData.anyPet}
-              hasLabel={false}
               inputPlaceholder="What types of pets? Some of our cleaners have pet allergies."
               inputId="notesPet"
               inputHeight="h-[55px]"
@@ -154,10 +153,8 @@ const Booking4 = () => {
             />
             <div className="mt-[30px]">
               <MultiLineInput
-                hasLabel={true}
                 labelText="ADDITIONAL NOTES"
-                inputPlaceholder="I would like Sophie to be my cleaner. Please change my sheets 
-                (fresh bedding is on the bed) and empty the dishwasher."
+                inputPlaceholder="I would like Sophie to be my cleaner. Please change my sheets (fresh bedding is on the bed) and empty the dishwasher."
                 inputId="notes"
                 inputHeight="h-[100px]"
                 inputWidth="w-full md:w-[56.25vw] min-w-[325px]"
