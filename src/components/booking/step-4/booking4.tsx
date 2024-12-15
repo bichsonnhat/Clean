@@ -72,7 +72,7 @@ const Booking4 = () => {
                 inputPlaceholder="Enter a Location"
                 inputId="location"
                 inputWidth="40vw"
-                onChange={(e) => bookingUpdate({ bookingAdress: e.target.value })}
+                onChange={(e) => bookingUpdate({ bookingAddress: e.target.value })}
               />
               <div className="md:ml-2 mt-2 md:mt-0">
                 <InputWithLabel
@@ -163,7 +163,9 @@ const Booking4 = () => {
             </div>
 
             <div className="flex justify-center items-center mt-[55px] pb-[50px]">
-              <Button className="max-sm:hidden md:w-[12.5vw] h-[60px] bg-[#1A78F2] font-Averta-Semibold text-[16px]" onClick={handleRoute}>
+              <Button className="max-sm:hidden md:w-[12.5vw] h-[60px] bg-[#1A78F2] font-Averta-Semibold text-[16px]" 
+              disabled={bookingData.bookingAddress === undefined || bookingData.bookingAddress === "" || bookingData.APT === undefined || bookingData.APT === ""}
+              onClick={handleRoute}>
                 Next
               </Button>
             </div>

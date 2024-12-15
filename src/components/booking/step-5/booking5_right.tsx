@@ -2,6 +2,7 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
 import { bookingStore } from "@/utils/store/booking.store";
+import { useRouter } from "next/navigation";
 
 const Booking5Right = () => {
   const bookingData = bookingStore((state: any) => state.bookingData);
@@ -14,6 +15,28 @@ const Booking5Right = () => {
       return true;
     }
     return false;
+  }
+  const router = useRouter();
+  const handleRoute = () => {
+    router.push("/payment-success");
+  }
+  const mappingValue = (value: number) => {
+    switch (value) {
+      case 1:
+      return 'Flexible';
+      case 8:
+      return '08:00am';
+      case 8.5:
+      return '08:30am';
+      case 9:
+      return '09:00am';
+      case 9.5:
+      return '09:30am';
+      case 10:
+      return '10:00am';
+      default:
+      break;
+    }
   }
   useEffect(() => {
     handleDiscount() && setDiscount(8.1);
@@ -43,19 +66,19 @@ const Booking5Right = () => {
           </div>
           <div className="mb-4 border-t pt-4 flex">
             <p className="text-gray-600 font-Averta-Semibold">
-              {bookingData.bookingDate || '-'} at {bookingData.bookingTiming || '-'}
+              {bookingData.bookingDate || 'Date Booking'} at {mappingValue(bookingData.bookingTiming) || 'Time Booking'}
             </p>
           </div>
           <div className="mb-4 border-t pt-4">
             <p className=" text-gray-600 font-Averta-Semibold">
-            {bookingData.bookingAddress || '-'}
+            {bookingData.bookingAddress || 'Your Address'}
             </p>
           </div>
           <div className="border-t border-gray-200 pt-4">
             <p className=" text-gray-600 font-Averta-Semibold">
             Add-on: {Array.isArray(bookingData.anySpecificSpot) && bookingData.anySpecificSpot.length > 0
               ? bookingData.anySpecificSpot.map((spot: string) => spot).join(', ')
-              : '-'}
+              : 'Nothing added'}
             </p>
           </div>
         </div>
@@ -95,7 +118,7 @@ const Booking5Right = () => {
       </div>
 
       <div className="flex justify-center items-center ">
-        <Button className="md:w-1/3 h-[60px] bg-[#1A78F2] font-Averta-Semibold text-[16px]">
+        <Button className="md:w-1/3 h-[60px] bg-[#1A78F2] font-Averta-Semibold text-[16px]" disabled={bookingData.checked === undefined || bookingData.checked} onClick={handleRoute}>
           Place order
         </Button>
       </div>

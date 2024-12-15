@@ -30,6 +30,8 @@ const ProgressBar = () => {
     address: '',
     subTotal: ''
   })
+  const [dateTimeBooking, setDateTimeBooking] = useState<string>('')
+  const [addressBooking, setAddressBooking] = useState<string>('')
   const pathName = usePathname();
   const router = useRouter();
   const handleRoute = () => {
@@ -50,7 +52,7 @@ const ProgressBar = () => {
         router.push('/booking/step-5')
         break;
       case '/booking/step-5':
-        // router.push('/payment')
+        router.push("/payment-success");
         break;
       default:
         break;
@@ -58,8 +60,12 @@ const ProgressBar = () => {
   }
 
   useEffect(() => {
-    setServiceDetails({serviceType: bookingData.serviceCategory?.name || 'Home Cleaning', ...bookingData})
-  }, [bookingData])
+    setServiceDetails({
+      serviceType: bookingData.serviceCategory?.name || 'Home Cleaning',
+      scheduleDate: dateTimeBooking === 'Invalid Date at Invalid Date' ? '-' : dateTimeBooking,
+      address: addressBooking === 'undefined undefined' ? '-' : addressBooking,
+      subTotal: bookingData.totalPrice})
+  }, [dateTimeBooking, addressBooking])
 
   useEffect(() => {
     switch (pathName) {
@@ -74,9 +80,17 @@ const ProgressBar = () => {
         break;
       case '/booking/step-4':
         setStep(3)
+        const dateTimeBooking = new Date(bookingData.bookingDate).toLocaleDateString('en-GB', {
+          day: '2-digit', month: '2-digit', year: 'numeric'
+        }) + ' at ' + new Date(bookingData.bookingTiming).toLocaleTimeString('en-GB', {
+          hour: '2-digit', minute: '2-digit'
+        });
+        setDateTimeBooking(dateTimeBooking)
         break;
       case '/booking/step-5':
         setStep(4)
+        const addressBooking = bookingData.APT + ' ' + bookingData.bookingAddress;
+        setAddressBooking(addressBooking)
         break;
       default:
         break;

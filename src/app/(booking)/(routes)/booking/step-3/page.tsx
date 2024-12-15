@@ -41,6 +41,7 @@ const timeSlots = [
 
 const Step_3 = () => {
   const [timeSelected, setTimeSelected] = useState<number>(0);
+  const bookingData = bookingStore((state: any) => state.bookingData)
   const bookingUpdate = bookingStore((state: any) => state.updateBookingData)
   const router = useRouter();
 
@@ -100,7 +101,7 @@ const Step_3 = () => {
     </div>
 
     <div className="max-sm:hidden flex justify-center items-center mt-[35px]">
-      <Button className="w-[165px] h-[55px] bg-[#1A78F2] text-lg text-white font-Averta-Semibold" onClick={handleRoute}>Next</Button>
+      <Button className="w-[165px] h-[55px] bg-[#1A78F2] text-lg text-white font-Averta-Semibold" disabled={bookingData.bookingTiming===undefined} onClick={handleRoute}>Next</Button>
     </div>
 </div>
 

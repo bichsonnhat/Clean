@@ -62,6 +62,7 @@ const Select = () => {
         </div>
         <div className='w-[80%] h-fit flex flex-col sm:flex-row max-sm:justify-center max-sm:items-center max-sm:divide-y-2 sm:divide-x-2 divide-dashed m-auto border-2 rounded-2xl p-[20px] shadow-xl'>
             <div 
+              data-testid='select-service-div'
               className='w-[80%] sm:w-[50%] h-full flex flex-col items-center justify-center gap-[10px] hover:cursor-pointer max-sm:pb-5'
               onMouseEnter={() => setSelectService(mappingServiceCategory('Home Cleaning'))}
               onMouseLeave={() => setSelectService({ id: '', name: '' })}
@@ -78,6 +79,7 @@ const Select = () => {
               </div>
             </div>
             <div 
+              data-testid='select-service-div'
               className='w-[80%] sm:w-[50%] h-full flex flex-col items-center justify-center gap-[10px] hover:cursor-pointer max-sm:pt-5'
               onMouseEnter={() => setSelectService(mappingServiceCategory('Other Services'))}
               onMouseLeave={() => setSelectService({ id: '', name: '' })}
