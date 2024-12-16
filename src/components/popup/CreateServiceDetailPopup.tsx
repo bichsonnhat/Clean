@@ -43,9 +43,7 @@ export function CreateServiceDetailPopup() {
       }
       const data = await response.json();
       setServiceTypes(data);
-    } catch (error) {
-      console.error("Error fetching service types:", error);
-    }
+    } catch (error) {}
   };
   const createServiceDetail = async (data: createServiceDetailData) => {
     try {

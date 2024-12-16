@@ -65,7 +65,6 @@ export function UpdateServiceTypePopup({
       }
       return await response.json();
     } catch (error) {
-      console.error("Error fetching service types:", error);
       return [];
     }
   };

@@ -63,7 +63,6 @@ export function UpdateServiceDetailPopup({
       }
       return await response.json();
     } catch (error) {
-      console.error("Error fetching service types:", error);
       return [];
     }
   };
@@ -101,12 +100,13 @@ export function UpdateServiceDetailPopup({
     }
   };
 
-  const options = serviceTypesData
-    ? serviceTypesData.map((serviceType) => ({
-        id: serviceType.id.toString(),
-        name: serviceType.name.toString(),
-      }))
-    : [];
+  const options =
+    (serviceTypesData &&
+      serviceTypesData.map((serviceType) => ({
+        id: serviceType.id?.toString(),
+        name: serviceType.name?.toString(),
+      }))) ||
+    [];
 
   const {
     reset,
@@ -123,8 +123,8 @@ export function UpdateServiceDetailPopup({
     if (detailData) {
       reset({
         ...detailData,
-        serviceTypeId: detailData?.serviceTypeId?.toString(),
-        title: detailData.title.toString(),
+        serviceTypeId: detailData?.serviceTypeId?.toString() || "",
+        title: detailData?.title?.toString() || "",
       });
     }
   }, [id, detailData, reset]);
@@ -132,7 +132,7 @@ export function UpdateServiceDetailPopup({
   useEffect(() => {
     if (!open) {
       reset({
-        serviceTypeId: detailData?.serviceTypeId.toString(),
+        serviceTypeId: detailData?.serviceTypeId?.toString() || "default-id",
       });
     }
   }, [open, reset]);

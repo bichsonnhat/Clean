@@ -38,7 +38,12 @@ const ServiceTypeRow: React.FC<ServiceTypeRowProps> = ({
           <div
             className={`flex relative gap-4 justify-between items-start px-4 py-1.5 min-h-[27px] ${serviceColor}  bg-opacity-20 rounded-md`}
           >
-            <div className="z-0 flex-1 shrink my-auto basis-0 font-Averta-Bold text-[13px]">
+            <div
+              className={
+                "z-0 flex-1 shrink my-auto basis-0 font-Averta-Bold text-[13px] bg-transparent " +
+                serviceColor
+              }
+            >
               {category?.name}
             </div>
           </div>

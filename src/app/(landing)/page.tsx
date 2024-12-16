@@ -1,7 +1,7 @@
-"use client"
-import Footer from "@/components/footer/Footer"
-import Header from "@/components/header/Header"
-import HomePage from "@/components/homepage/HomePage"
+"use client";
+import Footer from "@/components/footer/footer";
+import Header from "@/components/header/header";
+import HomePage from "@/components/homepage/HomePage";
 
 const LandingPage = () => {
   return (
@@ -9,14 +9,14 @@ const LandingPage = () => {
       <div className="relative">
         <HomePage />
         <div className="absolute top-0 left-0 w-full">
-        <Header />
+          <Header />
         </div>
       </div>
       <div className="mt-auto">
         <Footer />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default LandingPage
+export default LandingPage;
