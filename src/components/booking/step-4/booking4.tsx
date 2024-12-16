@@ -64,8 +64,9 @@ const Booking4 = () => {
 
         <div className="mt-[50px]">
           <div className="flex justify-center">
-            <div className="flex flex-col md:flex-row">
+            <div className="flex flex-col gap-3 md:flex-row">
               <InputWithLabel
+                data-testid="mock-input-with-label1"
                 className="min-w-[250px]"
                 labelText="ADDRESS"
                 inputType="text"
@@ -74,17 +75,16 @@ const Booking4 = () => {
                 inputWidth="40vw"
                 onChange={(e) => bookingUpdate({ bookingAddress: e.target.value })}
               />
-              <div className="md:ml-2 mt-2 md:mt-0">
-                <InputWithLabel
-                  className="min-w-[100px]"
-                  labelText="APT.NUMBER"
-                  inputType="text"
-                  inputPlaceholder=""
-                  inputId="aptNum"
-                  inputWidth="13.125vw"
-                  onChange={(e) => bookingUpdate({ APT: e.target.value })}
-                />
-              </div>
+              <InputWithLabel
+                data-testid="mock-input-with-label2"
+                className="min-w-[100px]"
+                labelText="APT.NUMBER"
+                inputType="text"
+                inputPlaceholder=""
+                inputId="aptNum"
+                inputWidth="13.125vw"
+                onChange={(e) => bookingUpdate({ APT: e.target.value })}
+              />
             </div>
           </div>
 
