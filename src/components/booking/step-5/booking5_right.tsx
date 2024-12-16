@@ -118,7 +118,9 @@ const Booking5Right = () => {
       </div>
 
       <div className="flex justify-center items-center ">
-        <Button className="md:w-1/3 h-[60px] bg-[#1A78F2] font-Averta-Semibold text-[16px]" disabled={bookingData.checked === undefined || bookingData.checked} onClick={handleRoute}>
+        <Button className="md:w-1/3 h-[60px] bg-[#1A78F2] font-Averta-Semibold text-[16px]"
+         disabled={bookingData.checked === undefined || bookingData.checked} 
+         onClick={handleRoute}>
           Place order
         </Button>
       </div>

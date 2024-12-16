@@ -1,7 +1,11 @@
+"use client";
 import React from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const Career = () => {
+  const router = useRouter();
+
   const accreditions = [
     {
       logo: "/images/About/UIT.svg",
@@ -59,7 +63,10 @@ const Career = () => {
           <div className="font-Averta-Bold text-center text-5xl mt-10">
             <p className="leading-normal">Treat Employees Like</p>
             <p className="leading-normal">Your Own Customers</p>
-            <button className="px-16 py-3 mt-[9%] bg-[#1b78f2] rounded-xl text-lg font-Averta-Semibold tracking-normal leading-loose text-center text-white">
+            <button
+              onClick={() => router.push("/sign-in")}
+              className="px-16 py-3 mt-[9%] bg-[#1b78f2] rounded-xl text-lg font-Averta-Semibold tracking-normal leading-loose text-center text-white"
+            >
               Join Our Team
             </button>
           </div>

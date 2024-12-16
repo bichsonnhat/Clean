@@ -1,15 +1,10 @@
 import { InputWithLabel } from "@/components/input/inputwithlabel";
-import { CheckboxWithText } from "@/components/checkbox/checkboxwithtext";
 import Step_5 from "@/app/(booking)/(routes)/booking/step-5/page";
 import { render, screen, fireEvent } from '@testing-library/react';
 import { useRouter } from "next/navigation";
 
 jest.mock('@/components/input/inputwithlabel', () => ({
     InputWithLabel: jest.fn(() => <input data-testid="mock-input-with-label" />),
-}));
-
-jest.mock('@/components/checkbox/checkboxwithtext', () => ({
-    CheckboxWithText: jest.fn(() => <input data-testid="mock-checkbox-with-text" />),
 }));
 
 jest.mock("next/navigation", () => ({
@@ -67,10 +62,13 @@ describe("Booking5 Component", () => {
         );
     });
 
-    it("renders CheckboxWithText components correctly", () => {
+    it("renders checkbox correctly", () => {
         render(<Step_5 />);
 
-        expect(CheckboxWithText).toHaveBeenCalled;
+        const checkbox = screen.getByTestId("mock-checkbox-with-text");
+        expect(checkbox).toBeInTheDocument();
+        expect(checkbox).not.toBeChecked();
+        expect(checkbox).toHaveClass("h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500")
     });
 
     it("handle button next correctly", () => {
@@ -78,7 +76,9 @@ describe("Booking5 Component", () => {
         (useRouter as jest.Mock).mockReturnValue({ push }); // Set up mock push
     
         render(<Step_5 />);
-    
+        
+        fireEvent.click(screen.getByTestId("mock-checkbox-with-text"));
+
         fireEvent.click(screen.getByRole("button", { name: "Place order" })); // Use role for button
         expect(push).toHaveBeenCalledWith("/payment-success"); // Check navigation
     });

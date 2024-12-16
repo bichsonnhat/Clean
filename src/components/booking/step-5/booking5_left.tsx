@@ -1,11 +1,15 @@
 import { InputWithLabel } from "@/components/input/inputwithlabel";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { CheckboxWithText } from "@/components/checkbox/checkboxwithtext";
-import React from "react";
+import React, { useState } from "react";
 import { bookingStore } from "@/utils/store/booking.store";
 
 const Booking5Left = () => {
   const bookingUpdate = bookingStore((state: any) => state.updateBookingData)
+  const [checked, setChecked] = useState(false);
+  const handleCheckboxChange = () => {
+    setChecked(!checked);
+    bookingUpdate({ checked: checked });
+  }
   return (
     <div className="w-full md:w-2/3 p-4 bg-white min-h-screen">
       <div className="justify-center h-max">
@@ -95,7 +99,27 @@ const Booking5Left = () => {
             For any inquiries regarding payments or refunds, please contact us at [insert contact information, e.g., email or phone number].<br />
             Note: This policy is subject to change without prior notice. Please review our terms and conditions regularly.<br />
           </ScrollArea>
-          <CheckboxWithText />
+            <div className="items-top flex space-x-2 mt-[30px]">
+              <input
+                data-testid="mock-checkbox-with-text"
+                id="terms1"
+                type="checkbox"
+                checked={checked || false}
+                onChange={handleCheckboxChange}
+                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+              />
+              <div className="grid gap-1.5 leading-none">
+                <label
+                htmlFor="terms1"
+                className="text-sm font-Averta-Semibold leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                Accept terms and conditions
+                </label>
+                <p className="text-sm font-Averta-Regular text-muted-foreground">
+                You agree to our Terms of Service and Privacy Policy.
+                </p>
+              </div>
+            </div>
         </div>
       </div>
     </div>

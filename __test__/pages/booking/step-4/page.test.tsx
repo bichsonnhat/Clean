@@ -8,7 +8,7 @@ import Booking4 from "@/components/booking/step-4/booking4";
 import { useRouter } from "next/navigation";
 
 jest.mock('@/components/input/inputwithlabel', () => ({
-    InputWithLabel: jest.fn(() => <input data-testid="mock-input-with-label" />),
+    InputWithLabel: jest.fn(({onChange}) => <input data-testid="mock-input-with-label" onChange={onChange}/>),
 }));
   
 jest.mock('@/components/input/multipleline-input', () => ({
@@ -160,8 +160,17 @@ describe("Booking4 Component", () => {
         (useRouter as jest.Mock).mockReturnValue({ push }); // Set up mock push
     
         render(<Booking4 />);
-    
-        fireEvent.click(screen.getByRole("button", { name: "Next" })); // Use role for button
+        const nextButton = screen.getByRole("button", { name: "Next" }); // Use role for button
+        expect(nextButton).not.toBeEnabled(); // Check if button is not enabled
+
+        // Get the input field
+        const inputs = screen.getAllByTestId("mock-input-with-label"); 
+
+        // Fill in the required fields
+        fireEvent.change(inputs[0], { target: { value: "123 Main St" } });
+        fireEvent.change(inputs[1], { target: { value: "Apt 1" } });
+
+        fireEvent.click(nextButton); // Click the button
         expect(push).toHaveBeenCalledWith("/booking/step-5"); // Check navigation
     });
 });
