@@ -20,12 +20,12 @@ import {
 import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
+const createServiceDetailUrl = "http://localhost:3000/api/service-detail";
+
 export function CreateServiceDetailPopup() {
   const queryClient = useQueryClient();
 
   const fetchServiceTypesUrl = "http://localhost:3000/api/service-types";
-
-  const createServiceDetailUrl = "http://localhost:3000/api/service-detail";
 
   const [serviceTypes, setServiceTypes] = useState<ServiceType[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -44,24 +44,6 @@ export function CreateServiceDetailPopup() {
       const data = await response.json();
       setServiceTypes(data);
     } catch (error) {}
-  };
-  const createServiceDetail = async (data: createServiceDetailData) => {
-    try {
-      const response = await fetch(createServiceDetailUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) {
-        throw new Error("Error creating service detail");
-      }
-      const result = await response.json();
-      console.log(result);
-    } catch (error) {
-      console.error("Error creating service detail:", error);
-    }
   };
 
   useEffect(() => {
@@ -192,3 +174,24 @@ export function CreateServiceDetailPopup() {
     </Dialog>
   );
 }
+
+export const createServiceDetail = async (data: createServiceDetailData) => {
+  try {
+    const response = await fetch(createServiceDetailUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      throw new Error("Error creating service detail");
+    }
+    const result = await response.json();
+    console.log(result);
+    return result;
+  } catch (error) {
+    console.error("Error creating service detail:", error);
+    throw new Error("Error creating service detail");
+  }
+};

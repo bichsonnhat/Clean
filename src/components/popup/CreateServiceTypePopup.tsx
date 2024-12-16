@@ -18,13 +18,13 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
+const createServiceTypeUrl = "http://localhost:3000/api/service-types";
+
 export function CreateServiceTypePopup() {
   const queryClient = useQueryClient();
 
   const fetchServiceCategorysUrl =
     "http://localhost:3000/api/service-categories";
-
-  const createServiceTypeUrl = "http://localhost:3000/api/service-types";
 
   const [ServiceCategories, setServiceCategories] = useState<ServiceCategory[]>(
     []
@@ -41,24 +41,6 @@ export function CreateServiceTypePopup() {
       setServiceCategories(data);
     } catch (error) {
       console.error("Error fetching service categories:", error);
-    }
-  };
-  const createServiceType = async (data: createServiceTypeData) => {
-    try {
-      const response = await fetch(createServiceTypeUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) {
-        throw new Error("Error creating service type");
-      }
-      const result = await response.json();
-      console.log(result);
-    } catch (error) {
-      console.error("Error creating service type:", error);
     }
   };
 
@@ -192,3 +174,22 @@ export function CreateServiceTypePopup() {
     </Dialog>
   );
 }
+
+export const createServiceType = async (data: createServiceTypeData) => {
+  try {
+    const response = await fetch(createServiceTypeUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      throw new Error("Error creating service type");
+    }
+    const result = await response.json();
+    console.log(result);
+  } catch (error) {
+    console.error("Error creating service type:", error);
+  }
+};
