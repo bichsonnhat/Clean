@@ -1,149 +1,206 @@
-import { createServiceType } from "@/components/popup/CreateServiceTypePopup"; // Update import path
-import { createServiceTypeData } from "@/schema/serviceTypeSchema";
+/**
+ * @jest-environment node
+ */
+import { POST } from "@/app/(api)/(routes)/api/service-types/route";
+import prisma from "@/lib/db"; // Adjust import path
+import { Decimal } from "@prisma/client/runtime/library";
+import { NextResponse } from "next/server";
 
-// Mock the global fetch function
-global.fetch = jest.fn();
+// Mock prisma and NextResponse
+jest.mock("@/lib/db", () => ({
+  __esModule: true, // Nếu module được export với `export default`
+  default: {
+    serviceCategory: {
+      findUnique: jest.fn(),
+    },
+    serviceType: {
+      create: jest.fn(),
+    },
+  },
+}));
 
-describe("createServiceType", () => {
-  const createServiceTypeUrl = "http://localhost:3000/api/service-types";
+jest.mock("next/server", () => ({
+  NextResponse: {
+    json: jest.fn((data, init) => ({ data, ...init })),
+  },
+}));
 
+const mockServiceCategory = {
+  id: "4a961bfb-4ffd-45a7-9291-09471fb19470",
+  name: "Mock Service Type",
+  description: "A mock service type for testing",
+  createdAt: new Date(),
+  isActive: true,
+};
+
+describe("Create Service Type", () => {
+  // Reset mocks before each test
   beforeEach(() => {
-    // Clear all mocks before each test
     jest.clearAllMocks();
   });
 
-  it("should successfully create a service type", async () => {
-    // Prepare test data
-    const mockServiceTypeData: createServiceTypeData = {
-      categoryId: "1",
-      name: "Test Service Type",
-      basePrice: 100,
-      description: "A test service type description",
+  it("UTCID01", async () => {
+    const mockRequestBody = {
+      categoryId: "4a961bfb-4ffd-45a7-9291-09471fb19470",
+      name: null,
+      description: "abc97thvbghd",
+      basePrice: 0,
+      createdAt: new Date(),
+      isActive: true,
     };
 
-    // Mock a successful response
-    const mockResponse = {
-      ok: true,
-      json: jest.fn().mockResolvedValue({ id: 1, ...mockServiceTypeData }),
-    };
+    const mockRequest = {
+      json: jest.fn().mockResolvedValue(mockRequestBody),
+    } as unknown as Request;
 
-    // Mock fetch to return the mock response
-    (fetch as jest.MockedFunction<typeof fetch>).mockResolvedValueOnce(
-      mockResponse as any
+    // Mock prisma to return null for service type
+    (prisma.serviceCategory.findUnique as jest.Mock).mockResolvedValue(
+      mockServiceCategory
     );
 
-    // Spy on console methods
-    const consoleLogSpy = jest.spyOn(console, "log").mockImplementation();
-    const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
+    const response = (await POST(mockRequest)) as any;
 
-    // Call the function
-    await createServiceType(mockServiceTypeData);
+    expect(response.status).toBe(400);
 
-    // Verify fetch was called with correct arguments
-    expect(fetch).toHaveBeenCalledWith(createServiceTypeUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(mockServiceTypeData),
+    expect(response.data).toEqual({
+      status: "error",
+      error: "Name cannot be empty",
     });
-
-    // Verify console methods were called
-    expect(consoleLogSpy).toHaveBeenCalledWith(
-      expect.objectContaining({
-        id: 1,
-        ...mockServiceTypeData,
-      })
-    );
-
-    // Restore console methods
-    consoleLogSpy.mockRestore();
-    consoleErrorSpy.mockRestore();
   });
 
-  it("should handle error when service type creation fails", async () => {
-    // Prepare test data
-    const mockServiceTypeData: createServiceTypeData = {
-      categoryId: "1",
-      name: "Test Service Type",
-      basePrice: 100,
-      description: "A test service type description",
+  it("UTCID02", async () => {
+    const mockRequestBody = {
+      categoryId: "4a961bfb-4ffd-45a7-9291-09471fb19470",
+      name: "Clean type",
+      description: "abc97thvbghd",
+      basePrice: 50,
+      createdAt: new Date(),
+      isActive: true,
     };
 
-    // Mock a failed response
-    const mockErrorResponse = {
-      ok: false,
-      status: 500,
-      statusText: "Internal Server Error",
-    };
+    const mockRequest = {
+      json: jest.fn().mockResolvedValue(mockRequestBody),
+    } as unknown as Request;
 
-    // Mock fetch to return the error response
-    (fetch as jest.MockedFunction<typeof fetch>).mockResolvedValueOnce(
-      mockErrorResponse as any
+    // Mock prisma to return null for service type
+    (prisma.serviceCategory.findUnique as jest.Mock).mockResolvedValue(
+      mockServiceCategory
     );
 
-    // Spy on console error
-    const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
+    (prisma.serviceType.create as jest.Mock).mockResolvedValue(mockRequestBody);
 
-    // Call the function and expect it to handle the error without throwing
-    await createServiceType(mockServiceTypeData);
+    const response = (await POST(mockRequest)) as any;
 
-    // Verify fetch was called with correct arguments
-    expect(fetch).toHaveBeenCalledWith(createServiceTypeUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(mockServiceTypeData),
-    });
-
-    // Verify console.error was called
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      "Error creating service type:",
-      expect.any(Error)
-    );
-
-    // Restore console.error
-    consoleErrorSpy.mockRestore();
+    expect(response.data).toEqual(mockRequestBody);
   });
 
-  it("should handle network errors", async () => {
-    // Prepare test data
-    const mockServiceTypeData: createServiceTypeData = {
-      categoryId: "1",
-      name: "Test Service Type",
-      basePrice: 100,
-      description: "A test service type description",
+  it("UTCID03", async () => {
+    const mockRequestBody = {
+      categoryId: null,
+      name: null,
+      description: "abc97thvbghd",
+      basePrice: 50,
+      createdAt: new Date(),
+      isActive: true,
     };
 
-    // Mock a network error
-    const networkError = new Error("Network Error");
-    (fetch as jest.MockedFunction<typeof fetch>).mockRejectedValueOnce(
-      networkError
-    );
+    const mockRequest = {
+      json: jest.fn().mockResolvedValue(mockRequestBody),
+    } as unknown as Request;
 
-    // Spy on console error
-    const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
+    // Mock prisma to return null for service type
+    (prisma.serviceCategory.findUnique as jest.Mock).mockResolvedValue(null);
 
-    // Call the function and expect it to handle the error without throwing
-    await createServiceType(mockServiceTypeData);
+    const response = (await POST(mockRequest)) as any;
 
-    // Verify fetch was called with correct arguments
-    expect(fetch).toHaveBeenCalledWith(createServiceTypeUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(mockServiceTypeData),
+    expect(response.status).toBe(404);
+
+    expect(response.data).toEqual({
+      status: "error",
+      error: "Service Category not found",
     });
+  });
 
-    // Verify console.error was called with the network error
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      "Error creating service type:",
-      networkError
+  it("UTCID04", async () => {
+    const mockRequestBody = {
+      categoryId: null,
+      name: "Clean type",
+      description: "abc97thvbghd",
+      basePrice: -1,
+      createdAt: new Date(),
+      isActive: true,
+    };
+
+    const mockRequest = {
+      json: jest.fn().mockResolvedValue(mockRequestBody),
+    } as unknown as Request;
+
+    // Mock prisma to return null for service type
+    (prisma.serviceCategory.findUnique as jest.Mock).mockResolvedValue(null);
+
+    const response = (await POST(mockRequest)) as any;
+
+    expect(response.status).toBe(404);
+
+    expect(response.data).toEqual({
+      status: "error",
+      error: "Service Category not found",
+    });
+  });
+
+  it("UTCID05", async () => {
+    const mockRequestBody = {
+      categoryId: null,
+      name: "Clean type",
+      description: "abc97thvbghd",
+      basePrice: 0,
+      createdAt: new Date(),
+      isActive: true,
+    };
+
+    const mockRequest = {
+      json: jest.fn().mockResolvedValue(mockRequestBody),
+    } as unknown as Request;
+
+    // Mock prisma to return null for service type
+    (prisma.serviceCategory.findUnique as jest.Mock).mockResolvedValue(null);
+
+    const response = (await POST(mockRequest)) as any;
+
+    expect(response.status).toBe(404);
+
+    expect(response.data).toEqual({
+      status: "error",
+      error: "Service Category not found",
+    });
+  });
+
+  it("UTCID06", async () => {
+    const mockRequestBody = {
+      categoryId: "4a961bfb-4ffd-45a7-9291-09471fb19470",
+      name: null,
+      description: "abc97thvbghd",
+      basePrice: -1,
+      createdAt: new Date(),
+      isActive: true,
+    };
+
+    const mockRequest = {
+      json: jest.fn().mockResolvedValue(mockRequestBody),
+    } as unknown as Request;
+
+    // Mock prisma to return null for service type
+    (prisma.serviceCategory.findUnique as jest.Mock).mockResolvedValue(
+      mockServiceCategory
     );
 
-    // Restore console.error
-    consoleErrorSpy.mockRestore();
+    const response = (await POST(mockRequest)) as any;
+
+    expect(response.status).toBe(400);
+
+    expect(response.data).toEqual({
+      status: "error",
+      error: "Base price cannot be negative",
+    });
   });
 });

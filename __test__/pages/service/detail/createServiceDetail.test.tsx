@@ -1,108 +1,274 @@
-import { createServiceDetailData } from "@/schema/serviceDetailSchema";
-import { createServiceDetail } from "@/components/popup/CreateServiceDetailPopup";
+/**
+ * @jest-environment node
+ */
+import { POST } from "@/app/(api)/(routes)/api/service-detail/route";
+import prisma from "@/lib/db"; // Adjust import path
+import { Decimal } from "@prisma/client/runtime/library";
+import { NextResponse } from "next/server";
 
-// Mock the global fetch function
-global.fetch = jest.fn();
+// Mock prisma and NextResponse
+jest.mock("@/lib/db", () => ({
+  __esModule: true, // Nếu module được export với `export default`
+  default: {
+    serviceType: {
+      findUnique: jest.fn(),
+    },
+    serviceDetail: {
+      create: jest.fn(),
+    },
+  },
+}));
 
-describe("createServiceDetail", () => {
+jest.mock("next/server", () => ({
+  NextResponse: {
+    json: jest.fn((data, init) => ({ data, ...init })),
+  },
+}));
+
+const mockServiceType = {
+  id: "4a961bfb-4ffd-45a7-9291-09471fb19470",
+  categoryId: "dummy-category-id",
+  name: "Mock Service Type",
+  description: "A mock service type for testing",
+  basePrice: new Decimal(200),
+  createdAt: new Date(),
+  isActive: true,
+};
+
+describe("Create Service Detail", () => {
+  // Reset mocks before each test
   beforeEach(() => {
-    // Clear all mocks before each test
     jest.clearAllMocks();
   });
 
-  it("should successfully create a service detail", async () => {
-    // Prepare test data
-    const mockServiceDetailData: createServiceDetailData = {
-      serviceTypeId: "1",
-      title: "Test Service Detail",
-      multiplyPrice: 2,
-      additionalPrice: 50,
+  it("UTCID01", async () => {
+    const mockRequestBody = {
+      serviceTypeId: "4a961bfb-4ffd-45a7-9291-09471fb19470",
+      title: "Half DAy",
+      multiplyPrice: -1,
+      additionalPrice: 0,
     };
 
-    // Mock a successful response
-    const mockResponse = {
-      ok: true,
-      json: jest.fn().mockResolvedValue({ id: 1, ...mockServiceDetailData }),
-    };
+    const mockRequest = {
+      json: jest.fn().mockResolvedValue(mockRequestBody),
+    } as unknown as Request;
 
-    // Mock fetch to return the mock response
-    (fetch as jest.MockedFunction<typeof fetch>).mockResolvedValueOnce(
-      mockResponse as any
+    // Mock prisma to return null for service type
+    (prisma.serviceType.findUnique as jest.Mock).mockResolvedValue(
+      mockServiceType
     );
 
-    // Spy on console.log
-    const consoleLogSpy = jest.spyOn(console, "log").mockImplementation();
+    const response = (await POST(mockRequest)) as any;
 
-    // Expect the function to resolve without throwing
-    await expect(createServiceDetail(mockServiceDetailData)).resolves.toEqual({
-      id: 1,
-      ...mockServiceDetailData,
+    expect(response.status).toBe(400);
+
+    expect(response.data).toEqual({
+      status: "error",
+      error: "Multiply price must be greater than or equal to 1",
     });
-
-    // Verify fetch was called with correct arguments
-    expect(fetch).toHaveBeenCalledWith(
-      "http://localhost:3000/api/service-detail",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(mockServiceDetailData),
-      }
-    );
-
-    // Verify console.log was called
-    expect(consoleLogSpy).toHaveBeenCalledWith({
-      id: 1,
-      ...mockServiceDetailData,
-    });
-
-    // Restore console.log
-    consoleLogSpy.mockRestore();
   });
 
-  it("should handle errors when creating a service detail", async () => {
-    // Prepare test data
-    const mockServiceDetailData: createServiceDetailData = {
-      serviceTypeId: "1",
-      title: "Test Service Detail",
+  it("UTCID02", async () => {
+    const mockRequestBody = {
+      serviceTypeId: "4a961bfb-4ffd-45a7-9291-09471fb19470",
+      title: "b",
+      multiplyPrice: 0,
+      additionalPrice: -10,
+    };
+
+    const mockRequest = {
+      json: jest.fn().mockResolvedValue(mockRequestBody),
+    } as unknown as Request;
+
+    // Mock prisma to return null for service type
+    (prisma.serviceType.findUnique as jest.Mock).mockResolvedValue(
+      mockServiceType
+    );
+
+    const response = (await POST(mockRequest)) as any;
+
+    expect(response.status).toBe(400);
+
+    expect(response.data).toEqual({
+      status: "error",
+      error: "Additional price must be greater than or equal to 0",
+    });
+  });
+
+  it("UTCID03", async () => {
+    const mockRequestBody = {
+      serviceTypeId: "4a961bfb-4ffd-45a7-9291-09471fb19470",
+      title: null,
       multiplyPrice: 2,
       additionalPrice: 50,
     };
 
-    // Mock an error response
-    const mockErrorResponse = {
-      ok: false,
-      status: 500,
-      statusText: "Internal Server Error",
+    const mockRequest = {
+      json: jest.fn().mockResolvedValue(mockRequestBody),
+    } as unknown as Request;
+
+    // Mock prisma to return null for service type
+    (prisma.serviceType.findUnique as jest.Mock).mockResolvedValue(
+      mockServiceType
+    );
+
+    const response = (await POST(mockRequest)) as any;
+
+    expect(response.status).toBe(400);
+
+    expect(response.data).toEqual({
+      status: "error",
+      error: "Title cannot be empty",
+    });
+  });
+
+  it("UTCID04", async () => {
+    const mockRequestBody = {
+      serviceTypeId: "abc97thvbghd",
+      title: "b",
+      multiplyPrice: 2,
+      additionalPrice: 0,
     };
 
-    // Mock fetch to return the error response
-    (fetch as jest.MockedFunction<typeof fetch>).mockResolvedValueOnce(
-      mockErrorResponse as any
-    );
+    const mockRequest = {
+      json: jest.fn().mockResolvedValue(mockRequestBody),
+    } as unknown as Request;
 
-    // Spy on console.error
-    const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
+    // Mock prisma to return null for service type
+    (prisma.serviceType.findUnique as jest.Mock).mockResolvedValue(null);
 
-    // Expect the function to throw an error
-    await expect(createServiceDetail(mockServiceDetailData)).rejects.toThrow(
-      "Error creating service detail"
-    );
+    const response = (await POST(mockRequest)) as any;
 
-    // Verify fetch was called with correct arguments
-    expect(fetch).toHaveBeenCalledWith(
-      "http://localhost:3000/api/service-detail",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(mockServiceDetailData),
-      }
-    );
+    expect(response.status).toBe(404);
 
-    // Restore console.error
-    consoleErrorSpy.mockRestore();
+    expect(response.data).toEqual({
+      status: "error",
+      error: "Service type not found",
+    });
+  });
+
+  it("UTCID05", async () => {
+    const mockRequestBody = {
+      serviceTypeId: "abc97thvbghd",
+      title: null,
+      multiplyPrice: -1,
+      additionalPrice: -10,
+    };
+
+    const mockRequest = {
+      json: jest.fn().mockResolvedValue(mockRequestBody),
+    } as unknown as Request;
+
+    // Mock prisma to return null for service type
+    (prisma.serviceType.findUnique as jest.Mock).mockResolvedValue(null);
+
+    const response = (await POST(mockRequest)) as any;
+
+    expect(response.status).toBe(404);
+
+    expect(response.data).toEqual({
+      status: "error",
+      error: "Service type not found",
+    });
+  });
+
+  it("UTCID06", async () => {
+    const mockRequestBody = {
+      serviceTypeId: "abc97thvbghd",
+      title: "Half DAy",
+      multiplyPrice: 0,
+      additionalPrice: 50,
+    };
+
+    const mockRequest = {
+      json: jest.fn().mockResolvedValue(mockRequestBody),
+    } as unknown as Request;
+
+    // Mock prisma to return null for service type
+    (prisma.serviceType.findUnique as jest.Mock).mockResolvedValue(null);
+
+    const response = (await POST(mockRequest)) as any;
+
+    expect(response.status).toBe(404);
+
+    expect(response.data).toEqual({
+      status: "error",
+      error: "Service type not found",
+    });
+  });
+
+  it("UTCID07", async () => {
+    const mockRequestBody = {
+      serviceTypeId: null,
+      title: null,
+      multiplyPrice: 0,
+      additionalPrice: 0,
+    };
+
+    const mockRequest = {
+      json: jest.fn().mockResolvedValue(mockRequestBody),
+    } as unknown as Request;
+
+    // Mock prisma to return null for service type
+    (prisma.serviceType.findUnique as jest.Mock).mockResolvedValue(null);
+
+    const response = (await POST(mockRequest)) as any;
+
+    expect(response.status).toBe(404);
+
+    expect(response.data).toEqual({
+      status: "error",
+      error: "Service type not found",
+    });
+  });
+
+  it("UTCID08", async () => {
+    const mockRequestBody = {
+      serviceTypeId: null,
+      title: "Half DAy",
+      multiplyPrice: 2,
+      additionalPrice: -10,
+    };
+
+    const mockRequest = {
+      json: jest.fn().mockResolvedValue(mockRequestBody),
+    } as unknown as Request;
+
+    // Mock prisma to return null for service type
+    (prisma.serviceType.findUnique as jest.Mock).mockResolvedValue(null);
+
+    const response = (await POST(mockRequest)) as any;
+
+    expect(response.status).toBe(404);
+
+    expect(response.data).toEqual({
+      status: "error",
+      error: "Service type not found",
+    });
+  });
+
+  it("UTCID09", async () => {
+    const mockRequestBody = {
+      serviceTypeId: null,
+      title: "b",
+      multiplyPrice: -1,
+      additionalPrice: 50,
+    };
+
+    const mockRequest = {
+      json: jest.fn().mockResolvedValue(mockRequestBody),
+    } as unknown as Request;
+
+    // Mock prisma to return null for service type
+    (prisma.serviceType.findUnique as jest.Mock).mockResolvedValue(null);
+
+    const response = (await POST(mockRequest)) as any;
+
+    expect(response.status).toBe(404);
+
+    expect(response.data).toEqual({
+      status: "error",
+      error: "Service type not found",
+    });
   });
 });

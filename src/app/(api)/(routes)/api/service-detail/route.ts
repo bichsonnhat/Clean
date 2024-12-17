@@ -25,9 +25,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-
-    const data = serviceDetailSchema.parse(body);
+    const data = await request.json();
 
     const serviceType = await prisma.serviceType.findUnique({
       where: { id: data.serviceTypeId },
@@ -40,6 +38,16 @@ export async function POST(request: Request) {
           error: "Service type not found",
         },
         { status: 404 }
+      );
+    }
+
+    if (data.title === null || data.title === "" || data.title === undefined) {
+      return NextResponse.json(
+        {
+          status: "error",
+          error: "Title cannot be empty",
+        },
+        { status: 400 }
       );
     }
 
@@ -74,9 +82,8 @@ export async function POST(request: Request) {
 
     return NextResponse.json(serviceDetail);
   } catch (error) {
-    console.error("Error creating service detail:", error);
     return NextResponse.json(
-      { status: "error", error: "Failed to create service detail" },
+      { status: "error", error: error },
       { status: 500 }
     );
   }
