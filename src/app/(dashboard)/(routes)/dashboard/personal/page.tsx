@@ -37,7 +37,7 @@ const PersonalPage = () => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center w-full h-[500px]">
+      <div className="flex justify-center items-center w-full h-screen">
         <ClipLoader color="#2A88F5" loading={true} size={30} />
       </div>
     );
