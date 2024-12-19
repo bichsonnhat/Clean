@@ -657,7 +657,7 @@ const EmployeeInfo: React.FC<HelperInfoProps> = ({ helperId }) => {
                             {resume ? (
                                 resume.type.startsWith('image/') ? (
                                     <div className="text-center">
-                                        <div className="lg:w-[25vw] h-[250px] mx-auto border-2 border-gray-500 rounded-md overflow-hidden flex items-center justify-center">
+                                        <div className="lg:w-[26.5vw] h-[250px] mx-auto border-2 border-gray-500 rounded-md overflow-hidden flex items-center justify-center">
                                             <Image
                                                 src={resumeUrl || ''}
                                                 alt="resume"

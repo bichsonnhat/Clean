@@ -314,28 +314,28 @@ const UpdateStaffInfo: React.FC<UpdateStaffInfoProps> = ({ userId }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id }),
       });
-  
+
       if (!postResponse.ok) {
         throw new Error("POST API failed.");
       }
-  
+
       const postResult = await postResponse.json();
       console.log("POST API result:", postResult);
-  
+
       // Gọi PUT API sau khi POST thành công
       const putResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/helpers/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updateData),
       });
-  
+
       if (!putResponse.ok) {
         throw new Error("PUT API failed.");
       }
-  
+
       const putResult = await putResponse.json();
       console.log("PUT API result:", putResult);
-  
+
       return { postResult, putResult };
     } catch (error) {
       console.error("Error in createAndUpdateHelper:", error);
@@ -385,11 +385,11 @@ const UpdateStaffInfo: React.FC<UpdateStaffInfoProps> = ({ userId }) => {
       //   headers: { "Content-Type": "application/json" },
       //   body: JSON.stringify({ id: curUserId }),
       // });
-  
+
       // if (!postResponse.ok) {
       //   throw new Error("POST API failed.");
       // }
-  
+
       // const postResult = await postResponse.json();
       // console.log("POST API result:", postResult);
 
@@ -406,7 +406,7 @@ const UpdateStaffInfo: React.FC<UpdateStaffInfoProps> = ({ userId }) => {
 
   if (!helperData)
     return (
-      <div className="flex w-full h-full items-center justify-center">
+      <div className="flex justify-center items-center w-full h-screen">
         <ClipLoader color="#2A88F5" loading={true} size={30} />
       </div>
     );
@@ -657,7 +657,7 @@ const UpdateStaffInfo: React.FC<UpdateStaffInfoProps> = ({ userId }) => {
             {idCardUrl ? (
               <>
                 <div className="text-center">
-                  <div className="lg:w-[25vw] h-[250px] mx-auto border-2 border-gray-500 rounded-md overflow-hidden bg-white flex items-center justify-center">
+                  <div className="lg:w-[26.5vw] h-[250px] mx-auto border-2 border-gray-500 rounded-md overflow-hidden bg-white flex items-center justify-center">
                     <Image
                       src={idCardUrl}
                       alt="identity"

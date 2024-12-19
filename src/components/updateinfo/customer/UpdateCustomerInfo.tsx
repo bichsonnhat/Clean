@@ -264,7 +264,7 @@ const UpdateCustomerInfo: React.FC<UpdateCustomerInfoProps> = ({ userId }) => {
 
   if (!customerData)
     return (
-      <div className="flex w-full h-full items-center justify-center">
+      <div className="flex justify-center items-center w-full h-screen">
         <ClipLoader color="#2A88F5" loading={true} size={30} />
       </div>
     );
