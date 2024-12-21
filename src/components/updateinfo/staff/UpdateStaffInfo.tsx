@@ -450,17 +450,13 @@ const UpdateStaffInfo: React.FC<UpdateStaffInfoProps> = ({ userId }) => {
 
       checkSubmit = true;
       // alert("Form submitted successfully!");
-      toast({ title: "Form submitted successfully!" });
-    
+      toast({ title: "Info updated successfully!" });
+
       queryClient.invalidateQueries({ queryKey: ["updateHelperInfo"] });
     } catch (error) {
       console.error("Failed to submit data:", error);
       checkSubmit = false;
       // alert("Something went wrong during form submission.");
-      toast({
-        variant: "destructive",
-        title: "Something went wrong during form submission.",
-      });
     } finally {
       if (checkSubmit) {
         // router.push(`${process.env.NEXT_PUBLIC_API_URL}`);
@@ -471,7 +467,7 @@ const UpdateStaffInfo: React.FC<UpdateStaffInfoProps> = ({ userId }) => {
         // alert("Failed to submit form");
         toast({
           variant: "destructive",
-          title: "Failed to submit form",
+          title: "Fail to update data",
         });
       }
     }
@@ -486,11 +482,12 @@ const UpdateStaffInfo: React.FC<UpdateStaffInfoProps> = ({ userId }) => {
 
   return (
     <div>
-      {isSubmitting ? (
-        <div className="flex justify-center items-center w-full h-screen">
+      {isSubmitting && (
+        <div className="flex justify-center items-center w-full h-screen bg-gray-400 bg-opacity-50 fixed top-0 left-0 z-50">
           <ClipLoader color="#2A88F5" loading={true} size={30} />
         </div>
-      ) : (
+      )}
+      <div className={isSubmitting ? "pointer-events-none opacity-50" : ""}>
         <form
           className="flex flex-col md:flex-row h-full relative min-h-screen"
           onSubmit={handleSubmit(onSubmitHandle)}>
@@ -885,7 +882,7 @@ const UpdateStaffInfo: React.FC<UpdateStaffInfoProps> = ({ userId }) => {
             </div>
           </div>
         </form>
-      )}
+      </div>
     </div>
 
   )
