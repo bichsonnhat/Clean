@@ -57,12 +57,7 @@ const LeaveRequestRow: React.FC<LeaveRequestRowProps> = ({
       className={`flex flex-wrap w-full border-b border-gray-200 max-md:max-w-full items-start lg:items-center h-auto py-4 px-2.5 cursor-pointer bg-white hover:bg-[#f4f7ff]`}
     >
       <div
-        onClick={(e) => e.stopPropagation()}
-        className={`flex flex-col lg:flex-[1] grow shrink justify-center w-full lg:w-[66px]`}
-      >
-      </div>
-      <div
-        className={`flex flex-col lg:flex-[2] grow shrink justify-center pl-2.5 text-sm font-bold text-neutral-800 w-full lg:w-[70px]`}
+        className={`flex flex-col lg:flex-[2] grow shrink justify-center pl-3.5 text-sm font-bold text-neutral-800 w-full lg:w-[70px]`}
       >
         <div className="overflow-hidden self-stretch px-3 lg:py-4 py-2 w-full  font-Averta-Bold text-[14px]">
           {helper?.user?.fullName}

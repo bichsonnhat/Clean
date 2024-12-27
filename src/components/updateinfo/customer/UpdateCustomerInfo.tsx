@@ -73,7 +73,7 @@ const UpdateCustomerInfo: React.FC<UpdateCustomerInfoProps> = ({ userId }) => {
       console.log("Initial gender:", customerData.gender);
       let addressParts;
       if (customerData.address) {
-        addressParts = customerData.address.split(' - ');
+        addressParts = customerData.address.split(',');
       }
       else {
         addressParts = "";
@@ -81,11 +81,11 @@ const UpdateCustomerInfo: React.FC<UpdateCustomerInfoProps> = ({ userId }) => {
 
       reset({
         ...customerData,
-        houseNumber: addressParts[0],
-        streetName: addressParts[1],
-        ward: addressParts[2],
-        city: addressParts[3],
-        postalCode: addressParts[4],
+        houseNumber: addressParts[0]?.trim(),
+        streetName: addressParts[1]?.trim(),
+        ward: addressParts[2]?.trim(),
+        city: addressParts[3]?.trim(),
+        postalCode: addressParts[4]?.trim(),
         gender: customerData.gender ?? ""
       });
 

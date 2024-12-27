@@ -91,18 +91,18 @@ const UpdateStaffInfo: React.FC<UpdateStaffInfoProps> = ({ userId }) => {
     if (helperData) {
       let addressParts;
       if (addressParts) {
-        addressParts = helperData.address.split(' - ');
+        addressParts = helperData.address.split(',');
       }
       else {
         addressParts = "";
       }
       reset({
         ...helperData,
-        houseNumber: addressParts[0],
-        streetName: addressParts[1],
-        ward: addressParts[2],
-        city: addressParts[3],
-        postalCode: addressParts[4],
+        houseNumber: addressParts[0]?.trim(),
+        streetName: addressParts[1]?.trim(),
+        ward: addressParts[2]?.trim(),
+        city: addressParts[3]?.trim(),
+        postalCode: addressParts[4]?.trim(),
         gender: helperData.gender ?? ""
       });
 

@@ -1,144 +1,20 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-import { useRouter } from "next/navigation";
-import { NextResponse } from "next/server";
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 
 const isPublicRoute = createRouteMatcher([
-  "/dashboard(.*)",
-  "/select",
-  "/select-role",
-  "/booking(.*)",
-]);
+  // '/dashboard(.*)'
+])
 
-const isVerfiedRoute = createRouteMatcher(["/select-role"]);
-
-const isAdminRoute = createRouteMatcher([
-  "/dashboard/chart",
-  "/dashboard/order",
-  "/dashboard/customer",
-  "/dashboard/employee",
-  "/dashboard/service",
-  "/dashboard/service/category",
-  "/dashboard/service/detail",
-  "/dashboard/issue",
-  // "/api(.*)"
-]);
-
-const isCustomerRoute = createRouteMatcher([
-  "/dashboard/order-history",
-]);
-
-const isCutomserAdminSharedRoute = createRouteMatcher([
-  "/dashboard/feedback",
-  "/dashboard/refund",
-]);
-
-const isHelperRoute = createRouteMatcher([
-  "/dashboard/job-history",
-]);
-
-const isHelperAdminSharedRoute = createRouteMatcher([
-  "/dashboard/leave-request",
-  "/dashboard/issue",
-]);
-
-const isCustomerHelperSharedRoute = createRouteMatcher([
-  "/dashboard/personal",
-  "/dashboard/calendar",
-]);
-
-const roles = ["admin", "customer", "helper"];
-
-export default clerkMiddleware(async (auth, request) => {
-  const { userId, redirectToSignIn } = await auth();
-
-  if (!userId && isPublicRoute(request)) {
-    return redirectToSignIn();
+export default clerkMiddleware((auth, request) => {
+  if (isPublicRoute(request)) {
+    auth().protect()
   }
-
-  const role = (await auth()).sessionClaims?.metadata?.role;
-  if (!role) {
-    // If trying to access any public route except /select-role, redirect to /select-role
-    if (isPublicRoute(request) && request.nextUrl.pathname !== "/select-role") {
-      const url = new URL("/select-role", request.url);
-      return NextResponse.redirect(url);
-    }
-
-    // If trying to access routes that require a role, redirect to /select-role
-    if (
-      isAdminRoute(request) ||
-      isCustomerRoute(request) ||
-      isHelperRoute(request) ||
-      isCustomerHelperSharedRoute(request)
-    ) {
-      const url = new URL("/select-role", request.url);
-      return NextResponse.redirect(url);
-    }
-
-    return NextResponse.next();
-  }
-
-  if (isVerfiedRoute(request)) {
-    const url = new URL("/", request.url);
-    return NextResponse.redirect(url);
-  }
-
-  if (
-    isAdminRoute(request) &&
-    (await auth()).sessionClaims?.metadata?.role !== "admin"
-  ) {
-    const url = new URL("/", request.url);
-    return NextResponse.redirect(url);
-  }
-
-  if (
-    isCustomerRoute(request) &&
-    (await auth()).sessionClaims?.metadata?.role !== "customer"
-  ) {
-    const url = new URL("/", request.url);
-    return NextResponse.redirect(url);
-  }
-
-  if (
-    isHelperRoute(request) &&
-    (await auth()).sessionClaims?.metadata?.role !== "helper"
-  ) {
-    const url = new URL("/", request.url);
-    return NextResponse.redirect(url);
-  }
-
-  if (
-    isCustomerHelperSharedRoute(request) &&
-    (await auth()).sessionClaims?.metadata?.role !== "customer" &&
-    (await auth()).sessionClaims?.metadata?.role !== "helper"
-  ) {
-    const url = new URL("/", request.url);
-    return NextResponse.redirect(url);
-  }
-
-  if (
-    isCutomserAdminSharedRoute(request) &&
-    (await auth()).sessionClaims?.metadata?.role !== "customer" &&
-    (await auth()).sessionClaims?.metadata?.role !== "admin"
-  ) {
-    const url = new URL("/", request.url);
-    return NextResponse.redirect(url);
-  }
-
-  if (
-    isHelperAdminSharedRoute(request) &&
-    (await auth()).sessionClaims?.metadata?.role !== "helper" &&
-    (await auth()).sessionClaims?.metadata?.role !== "admin"
-  ) {
-    const url = new URL("/", request.url);
-    return NextResponse.redirect(url);
-  }
-});
+})
 
 export const config = {
   matcher: [
     // Skip Next.js internals and all static files, unless found in search params
-    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
     // Always run for API routes
-    "/(api|trpc)(.*)",
+    '/(api|trpc)(.*)',
   ],
-};
+}
