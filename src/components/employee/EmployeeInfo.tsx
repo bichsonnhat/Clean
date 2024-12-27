@@ -665,7 +665,7 @@ const EmployeeInfo: React.FC<HelperInfoProps> = ({ helperId, role }) => {
                                 {idCard ? (
                                     idCard.type.startsWith('image/') ? (
                                         <div className="text-center">
-                                            <div className="max-w-[26.5vw] h-[250px] mx-auto border-2 border-gray-500 rounded-md overflow-hidden flex items-center justify-center">
+                                            <div className="md:w-[26.5vw] w-fit h-fit max-h-[250px] mx-auto border-2 border-gray-500 rounded-md overflow-hidden flex items-center justify-center">
                                                 <Image
                                                     src={idCardUrl || ''}
                                                     alt="identity"
@@ -725,7 +725,7 @@ const EmployeeInfo: React.FC<HelperInfoProps> = ({ helperId, role }) => {
                                 {resume ? (
                                     resume.type.startsWith('image/') ? (
                                         <div className="text-center">
-                                            <div className="lg:w-[26.5vw] h-[250px] mx-auto border-2 border-gray-500 rounded-md overflow-hidden flex items-center justify-center">
+                                            <div className="md:w-[26.5vw] h-fit max-h-[250px] mx-auto border-2 border-gray-500 rounded-md overflow-hidden flex items-center justify-center">
                                                 <Image
                                                     src={resumeUrl || ''}
                                                     alt="resume"
