@@ -1,7 +1,7 @@
-import About from "@/components/about/about";
-import Footer from "@/components/footer/footer";
-import Header from "@/components/header/header";
-import React from "react";
+import About from '@/components/about/about'
+import Footer from '@/components/footer/Footer'
+import Header from '@/components/header/Header'
+import React from 'react'
 
 const AboutPage = () => {
   return (
@@ -9,14 +9,14 @@ const AboutPage = () => {
       <div className="relative">
         <About />
         <div className="absolute top-0 left-0 w-full">
-          <Header />
+        <Header />
         </div>
       </div>
       <div className="mt-auto">
         <Footer />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default AboutPage;
+export default AboutPage
