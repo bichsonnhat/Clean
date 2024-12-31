@@ -1,20 +1,24 @@
 "use client"
 import { InputWithLabel } from "@/components/input/inputwithlabel";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Label } from "@/components/ui/label"
 import { CheckboxWithText } from "@/components/checkbox/checkboxwithtext";
 import React, { useEffect, useState } from "react";
 import { bookingStore } from "@/utils/store/booking.store";
+import FileDownloadCard from "@/components/card/FileDownloadCard";
+import { useToast } from "@/hooks/use-toast";
 
 const Booking5Left = () => {
   const bookingUpdate = bookingStore((state: any) => state.updateBookingData);
   const setValidateFields = bookingStore((state: any) => state.setValidateFields);
+  const { toast } = useToast();
 
   // State để lưu giá trị và lỗi
   const [fullName, setFullName] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [contactNote, setContactNote] = useState("");
-  const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
+  const [contract, setContract] = useState<File | null>(null);
 
   const [errors, setErrors] = useState({
     fullName: "",
@@ -63,6 +67,25 @@ const Booking5Left = () => {
   useEffect(() => {
     setValidateFields(() => validateFields());
 
+    const contractUrl = "https://res.cloudinary.com/dk4auce82/image/upload/v1735639521/image-upload/xdsiy7nayojazkxphrbt.pdf";
+
+
+    if (contractUrl) {
+      fetch(contractUrl)
+          .then((response) => response.blob())
+          .then((blob) => {
+              // Kiểm tra loại MIME của file để xác định tên và kiểu đúng
+              const mimeType = blob.type;
+
+              // Nếu là file PDF
+              const file = new File([blob], 'Employment Contract', { type: mimeType });
+
+              // Set file vào state (setIdCard sẽ nhận file)
+              setContract(file);
+          })
+          .catch((error) => console.error('Error fetching the identity card:', error));
+  }
+
     // Hủy đăng ký khi component unmount
     return () => setValidateFields(null);
   }, []);
@@ -71,6 +94,29 @@ const Booking5Left = () => {
   const handleBlur = () => {
     setValidateFields(() => validateFields());
   };
+
+  const handleDownload = (file: File | null) => {
+    if (!file) {
+        // alert("No file selected to download.");
+        toast({
+            variant: "destructive",
+            title: "No file selected to download.",
+        });
+        return;
+    }
+
+    const fileUrl = URL.createObjectURL(file);
+
+    const link = document.createElement('a');
+    link.href = fileUrl;
+    link.download = file.name;
+
+    document.body.appendChild(link);
+    link.click();
+
+    document.body.removeChild(link);
+    URL.revokeObjectURL(fileUrl);
+};
 
   return (
     <div className="w-full md:w-2/3 p-4 bg-white min-h-screen">
@@ -179,8 +225,22 @@ const Booking5Left = () => {
             />
           </div>
         </div>
+        <div className="grid justify-start gap-1.5">
+          <Label className="text-[14px] w-fit font-Averta-Semibold text-[#9FA7B0]">
+            CONTRACT
+          </Label>
+          <FileDownloadCard 
+            className="min-w-[360px] w-[25vw]" 
+            canUpdate={false}
+            fileName={contract?.name}
+            fileSize={contract?.size}
+            onDownload={() => handleDownload(contract)}/>
+        </div>
 
-        <div className="mt-[30px] grid justify-center ">
+        <div className="grid justify-center gap-1.5">
+          <Label className="text-[14px] w-fit font-Averta-Semibold text-[#9FA7B0]">
+            POLICY
+          </Label>
           <ScrollArea
             style={{ width: `calc(50vw + 8px)` }}
             className="h-[200px] min-w-[360px] w-full font-Averta-Regular rounded-md border p-3"
