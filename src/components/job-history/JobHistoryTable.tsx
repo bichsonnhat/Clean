@@ -42,7 +42,8 @@ const JobHistoryTable = () => {
     );
     const userInfo = await userResponse.json();
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/bookings?role=${userInfo.role}&userId=${userInfo.userId}`
+      // `${process.env.NEXT_PUBLIC_API_URL}/api/bookings?role=${userInfo.role}&userId=${userInfo.userId}`
+      `${process.env.NEXT_PUBLIC_API_URL}/api/bookings?role=admin&userId=${userInfo.userId}`
     );
     const data = await response.json();
     setBookings(data);
