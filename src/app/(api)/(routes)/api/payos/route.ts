@@ -1,26 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import createPaymentLink from "@/app/(api)/(routes)/(lib)/payos-service";
-
-// export async function GET() {
-//   try {
-//     const serviceDetails = await prisma.serviceDetail.findMany({
-//       include: {
-//         serviceType: {
-//           select: { name: true },
-//         },
-//       },
-//     });
-
-//     return NextResponse.json(serviceDetails);
-//   } catch (error) {
-//     console.error("Error fetching service details", error);
-//     return NextResponse.json(
-//       { status: "error", error: "Failed to fetch service details" },
-//       { status: 500 }
-//     );
-//   }
-// }
+import { assignHelperToBooking } from "../../(lib)/assignHelperToBooking";
 
 //Create a new booking
 export async function POST(req: Request) {
@@ -30,7 +11,36 @@ export async function POST(req: Request) {
       data,
     });
 
+    const helperId = await assignHelperToBooking(newBooking);
+
+    if (helperId === null) {
+      return NextResponse.json(
+        { error: "No available helpers" },
+        { status: 404 }
+      );
+    }
+
+    await prisma.booking.update({
+      where: {
+        id: newBooking.id,
+      },
+      data: {
+        helperId,
+      },
+    });
+
     const paymentLink = await createPaymentLink(newBooking.id);
+
+    console.log(
+      "booking " +
+        (
+          await prisma.booking.findFirst({
+            where: {
+              id: newBooking.id,
+            },
+          })
+        )?.helperId
+    );
 
     return NextResponse.json({
       paymentLink: paymentLink,
