@@ -105,6 +105,8 @@ const Booking5Right = () => {
           }
           const postResult = await bookingResponse.json();
           console.log("POST API result:", postResult);
+          
+          console.log("Booking ID: ", postResult.result.id);
 
           // Gọi Stripe payment
           const stripeResponse = await fetch(
@@ -113,8 +115,8 @@ const Booking5Right = () => {
             }`
           );
 
-          const data = await stripeResponse.json();
-          router.push(data.url);
+          // const data = await stripeResponse.json();
+          // router.push(data.url);
         } else {
           await paymentMutation.mutateAsync(bookingPayload);
         }
