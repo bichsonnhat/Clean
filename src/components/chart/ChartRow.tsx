@@ -9,13 +9,13 @@ interface ChartRowProps {
 }
 
 export const ChartRow: React.FC<ChartRowProps> = ({service_name, location, date_time, service_fee, status}) => {
-    const statusStyle = status === 'completed' ? 'bg-[#2fb4a7] text-[#2fb4a7] bg-opacity-20' : 
-                    status === 'cancelled' ? 'bg-[#ec4536] text-[#ec4536] bg-opacity-20' : 
-                    status === 'pending' ? 'bg-[#ffb922] text-[#ffb922] bg-opacity-20' : 
-                    status === 'inprogress' ? 'bg-[#4086db] text-[#4086db] bg-opacity-20' : 
-                    status === 'requested' ? 'bg-[#ec4536] text-[#ec4536] bg-opacity-20' : 
-                    status === 'refunded' ? 'bg-[#4086db] text-[#4086db] bg-opacity-20' : 
-                    status === 'declined' ? 'bg-[#F97316] text-[#F97316] bg-opacity-20' : '';
+  const statusStyle = status === 'completed' ? 'bg-[#2fb4a7] text-[#2fb4a7] bg-opacity-20' : 
+                  status === 'cancelled' ? 'bg-[#ec4536] text-[#ec4536] bg-opacity-20' : 
+                  status === 'pending' ? 'bg-[#ffb922] text-[#ffb922] bg-opacity-20' : 
+                  status === 'inprogress' ? 'bg-[#4086db] text-[#4086db] bg-opacity-20' : 
+                  status === 'requested' ? 'bg-[#ec4536] text-[#ec4536] bg-opacity-20' : 
+                  status === 'refunded' ? 'bg-[#4086db] text-[#4086db] bg-opacity-20' : 
+                  status === 'declined' ? 'bg-[#F97316] text-[#F97316] bg-opacity-20' : '';
   return (
     <>
         <div className='flex flex-col sm:flex-row h-fit sm:h-[80px] p-[10px] gap-[10px]'>
