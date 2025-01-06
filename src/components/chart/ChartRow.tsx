@@ -9,21 +9,13 @@ interface ChartRowProps {
 }
 
 export const ChartRow: React.FC<ChartRowProps> = ({service_name, location, date_time, service_fee, status}) => {
-    const bgColor = status === 'completed' ? 'bg-[#B6F2E9]' : 
-                    status === 'cancelled' ? 'bg-[#F8A8A0]' : 
-                    status === 'pending' ? 'bg-[#EED691]' : 
-                    status === 'inprogress' ? 'bg-[#9EC6F8]' : 
-                    status === 'requested' ? 'bg-[#F87171]' : 
-                    status === 'refunded' ? 'bg-[#60A5FA]' : 
-                    status === 'declined' ? 'bg-[#F97316]' : '';
-
-    const textColor = status === 'completed' ? 'bg-[#34AE9B]' : 
-                    status === 'cancelled' ? 'bg-[#BF544A]' : 
-                    status === 'pending' ? 'bg-[#F0BC24]' : 
-                    status === 'inprogress' ? 'bg-[#236FCF]' : 
-                    status === 'requested' ? 'bg-[#B91C1C]' : 
-                    status === 'refunded' ? 'bg-[#1D4ED8]' : 
-                    status === 'declined' ? 'bg-[#C2410C]' : '';
+    const statusStyle = status === 'completed' ? 'bg-[#2fb4a7] text-[#2fb4a7] bg-opacity-20' : 
+                    status === 'cancelled' ? 'bg-[#ec4536] text-[#ec4536] bg-opacity-20' : 
+                    status === 'pending' ? 'bg-[#ffb922] text-[#ffb922] bg-opacity-20' : 
+                    status === 'inprogress' ? 'bg-[#4086db] text-[#4086db] bg-opacity-20' : 
+                    status === 'requested' ? 'bg-[#ec4536] text-[#ec4536] bg-opacity-20' : 
+                    status === 'refunded' ? 'bg-[#4086db] text-[#4086db] bg-opacity-20' : 
+                    status === 'declined' ? 'bg-[#F97316] text-[#F97316] bg-opacity-20' : '';
   return (
     <>
         <div className='flex flex-col sm:flex-row h-fit sm:h-[80px] p-[10px] gap-[10px]'>
@@ -42,8 +34,8 @@ export const ChartRow: React.FC<ChartRowProps> = ({service_name, location, date_
             <div className='w-full sm:w-[15.2%] pl-[12px] sm:m-auto py-[26.5] pr-[50px]'>
                 <div className='flex flex-row gap-4'>
                     <span className='md:hidden font-bold uppercase text-[#202224] opacity-80'>status: </span>
-                    <div className={`${bgColor} h-[30px] rounded-lg w-[90px] px-3`}>
-                        <div className={`${textColor} text-xs font-bold flex items-center justify-center h-full`}>{status.charAt(0).toUpperCase() + status.slice(1)}</div>
+                    <div className={`h-[30px] w-[90px] px-3 ${statusStyle} rounded-lg text-xs font-bold flex items-center justify-center `}>
+                        {status.charAt(0).toUpperCase() + status.slice(1)}
                     </div>
                 </div>
             </div>
