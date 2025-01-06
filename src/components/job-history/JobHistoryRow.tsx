@@ -68,7 +68,7 @@ const JobHistoryRow: React.FC<JobHistoryRowProps> = ({
   const paymentColor =
     booking.paymentStatus === "paid"
       ? "bg-[#00B69B] text-[#00B69B]"
-      : "bg-[#F87171] text-[#B91C1C]";
+      : "bg-[#FFD154] text-[#FF9500]";
 
   const [toggleHelperPopup, setToggleHelperPopup] = useState(false);
   const handleToggleHelperPopup = () => {
@@ -192,7 +192,7 @@ const JobHistoryRow: React.FC<JobHistoryRowProps> = ({
       <div className="lg:flex-[2] w-full lg:w-[90px] flex items-center lg:justify-center lg:py-6 mb-2 lg:mb-0">
         <div className="text-sm text-[#202224cc] lg:text-sm">
           <span className="lg:hidden font-bold">PRICE: </span>
-          {`${booking.totalPrice}/vnđ`}
+          {`${booking.totalPrice}/USD`}
         </div>
       </div>
 
@@ -203,7 +203,7 @@ const JobHistoryRow: React.FC<JobHistoryRowProps> = ({
             className={`flex relative gap-4 justify-between items-start px-4 py-1.5 min-w-28 min-h-[27px] ${statusColor}  bg-opacity-20 rounded-md`}
           >
             <div className="z-0 flex-1 shrink my-auto basis-0 font-Averta-Bold text-[13px] text-center">
-              {booking.status}
+              {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
             </div>
           </div>
         </div>
@@ -216,7 +216,7 @@ const JobHistoryRow: React.FC<JobHistoryRowProps> = ({
             className={`flex relative gap-4 justify-between items-start px-4 py-1.5 min-w-28 min-h-[27px] ${paymentColor}  bg-opacity-20 rounded-md`}
           >
             <div className="z-0 flex-1 shrink my-auto basis-0 font-Averta-Bold text-[13px] text-center">
-              {booking.paymentStatus}
+              {booking.paymentStatus.charAt(0).toUpperCase() + booking.paymentStatus.slice(1)}
             </div>
           </div>
         </div>
