@@ -6,17 +6,15 @@ export async function POST(req: Request) {
   try {
     const body: WebhookType = await req.json();
 
-    if (body.data.description == "VQRIO123") {
-      return NextResponse.json({ error: "Webhook Confirmed" }, { status: 200 });
-    }
-
-    console.log("Webhook data: ", body);
+    // if (body.data.description == "VQRIO123") {
+    //   return NextResponse.json({ error: "Webhook Confirmed" }, { status: 200 });
+    // }
 
     const data = body.data as WebhookDataType;
 
     const booking = await prisma.booking.findFirst({
       where: {
-        orderNumber: data.orderCode + 200,
+        orderNumber: data.orderCode + 7000,
       },
     });
 
